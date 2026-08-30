@@ -1,0 +1,56 @@
+{
+  "name": "privacypage-mcp",
+  "version": "0.1.0",
+  "mcpName": "io.github.rushi053/privacypage-mcp",
+  "description": "MCP server for PrivacyPage — generate privacy policies, terms of service, EULAs, cookie policies, and disclaimers for your app, straight from your AI agent.",
+  "type": "module",
+  "bin": {
+    "privacypage-mcp": "dist/index.js"
+  },
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
+    "start": "node dist/index.js",
+    "smoke-test": "node scripts/smoke-test.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "mcp",
+    "privacy-policy",
+    "legal",
+    "terms-of-service",
+    "ai-agents",
+    "model-context-protocol",
+    "eula",
+    "cookie-policy",
+    "disclaimer",
+    "gdpr",
+    "ccpa"
+  ],
+  "author": "PrivacyPage <hello@privacypage.io> (https://privacypage.io)",
+  "license": "MIT",
+  "homepage": "https://privacypage.io",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rushi053/privacypage-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rushi053/privacypage-mcp/issues"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "zod": "^4.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "^18.19.0",
+    "typescript": "^5.6.0"
+  }
+}
