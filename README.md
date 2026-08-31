@@ -98,6 +98,20 @@ Rate limit: 10 document generations per hour per IP. The server reports rate-lim
 | `PRIVACYPAGE_LICENSE_KEY` | Optional. License key used by `get_full_document` when no `licenseKey` argument is passed. |
 | `PRIVACYPAGE_API_URL` | Optional. Override the API base URL (defaults to `https://privacypage.io`). |
 
+## Data handling
+
+This server runs locally over stdio and makes HTTPS requests only to the PrivacyPage API (`https://privacypage.io`, or whatever `PRIVACYPAGE_API_URL` is set to). Everything below is verifiable in `src/index.ts` and `src/api.ts`.
+
+**What leaves your machine.** Only the explicit arguments the agent passes to a tool call — the fields the generated document prints, such as app/site name, platform, company name, contact email, website URL, data-collection and cookie selections, key policies, and jurisdiction (varying by tool). For the `generate_*` tools these are sent as a plain JSON POST body; `get_full_document` sends the `documentId` and license key as query parameters on a GET request. No conversation context, no filesystem contents, and nothing else from the agent session is read or transmitted.
+
+**Schema-bounded.** Each tool declares a fixed input schema, and every request payload is built field-by-field from those named arguments only. An agent has no channel to send extra context through these tools.
+
+**License key.** `PRIVACYPAGE_LICENSE_KEY` (or the `licenseKey` argument) is sent only to the PrivacyPage API, solely to prove entitlement when fetching a full document.
+
+**What's stored server-side.** The PrivacyPage service stores the generation inputs and the generated document — that's what lets a license key unlock a document by `documentId` after generation. This data is not used for analytics and is not shared. (Server-side behavior is a property of the privacypage.io service; this repository's source shows only what is sent.)
+
+**Rate limiting.** Generation endpoints are limited to 10 document generations per hour per IP; the server reports 429 responses to the agent with a retry message.
+
 ## Development
 
 ```bash
