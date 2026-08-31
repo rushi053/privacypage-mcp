@@ -60,29 +60,33 @@ Also consider a PR to the README of the `modelcontextprotocol/servers` GitHub re
 
 ### Submit to Smithery (MCPB bundle)
 
+Published: https://smithery.ai/servers/rjadeja053/privacypage-mcp (namespace is `rjadeja053`, not `rushi053`).
+
 Smithery's URL flow is only for hosted Streamable-HTTP servers — pasting the npm URL fails with a 403 scan error. For local stdio servers, Smithery distributes a pre-built [MCPB bundle](https://github.com/anthropics/mcpb) instead. The repo has a `manifest.json` (MCPB manifest) and `.mcpbignore` for this.
 
-Build the bundle:
+Note on `manifest.json`: Smithery's publish API requires each entry in `tools` to carry a full JSON Schema `inputSchema` (it becomes the server card), but the strict MCPB spec doesn't allow that key — so `mcpb validate`/`mcpb pack` reject this manifest ("Unrecognized key(s): 'inputSchema'"). That's expected: MCP clients read manifests with a loose schema that ignores unknown keys, so the extended manifest is safe. Just pack with plain `zip` instead of `mcpb pack`:
 
 ```bash
 cd /Users/rushiraj/Desktop/privacypage-mcp
 npm run build
-npm prune --omit=dev                       # bundle prod deps only
-npx -y @anthropic-ai/mcpb pack . privacypage-mcp.mcpb
-npm install                                # restore dev deps
+STAGE=$(mktemp -d)
+cp -R manifest.json dist package.json package-lock.json README.md LICENSE "$STAGE"/
+(cd "$STAGE" && npm ci --omit=dev && rm package-lock.json \
+  && zip -qr privacypage-mcp.mcpb manifest.json dist node_modules package.json README.md LICENSE)
+mv "$STAGE/privacypage-mcp.mcpb" . && rm -rf "$STAGE"
 ```
 
-Publish it (CLI, recommended):
+Publish it:
 
 ```bash
 npm install -g smithery@latest
-smithery auth login
-smithery mcp publish ./privacypage-mcp.mcpb -n rushi053/privacypage-mcp
+smithery auth login          # already done on this machine
+smithery mcp publish ./privacypage-mcp.mcpb -n rjadeja053/privacypage-mcp
 ```
 
-Or via UI: https://smithery.ai/new → choose the **Local (MCPB bundle)** option → upload `privacypage-mcp.mcpb` → complete the flow. The license-key config UI comes from `user_config` in `manifest.json`.
+The license-key config UI comes from `user_config` in `manifest.json`; the tool list on the server page comes from `tools` (including the `inputSchema` extensions). When bumping versions, also update `version` in `manifest.json` and keep the `tools` entries in sync with `src/index.ts`, then re-pack and re-publish.
 
-When bumping versions, also update `version` in `manifest.json`, re-pack, and re-publish.
+After publishing, polish the listing at https://smithery.ai/servers/rjadeja053/privacypage-mcp → Settings: set description, repository link, icon, and run the verification checklist.
 
 ## 5. Announce
 

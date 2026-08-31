@@ -42,27 +42,165 @@
   "tools": [
     {
       "name": "generate_privacy_policy",
-      "description": "Generate a GDPR/CCPA/COPPA-aware privacy policy for an app or website"
+      "description": "Generate a GDPR/CCPA/COPPA-aware privacy policy for an app or website",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "appName": { "type": "string", "description": "Name of the app or website, e.g. 'MyApp'" },
+          "platform": {
+            "type": "string",
+            "enum": ["iOS", "Android", "Both (iOS & Android)", "Web App", "All Platforms"],
+            "description": "Platform the app runs on"
+          },
+          "companyName": { "type": "string", "description": "Company or developer name, e.g. 'Acme Inc.'" },
+          "contactEmail": { "type": "string", "description": "Contact email for privacy inquiries" },
+          "websiteUrl": { "type": "string", "description": "Website URL, if any" },
+          "dataCollected": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1,
+            "description": "Types of data the app collects, e.g. 'Name & Email', 'Location Data', 'Usage Analytics'"
+          },
+          "thirdPartyServices": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1,
+            "description": "Third-party services/SDKs the app uses, e.g. 'Google Analytics / Firebase', 'Stripe / Payments'"
+          },
+          "childrenUnder13": {
+            "type": "boolean",
+            "description": "Whether the app is directed at children under 13 (COPPA)"
+          }
+        },
+        "required": [
+          "appName",
+          "platform",
+          "companyName",
+          "contactEmail",
+          "dataCollected",
+          "thirdPartyServices",
+          "childrenUnder13"
+        ]
+      }
     },
     {
       "name": "generate_terms_of_service",
-      "description": "Generate a Terms of Service agreement for an app or service"
+      "description": "Generate a Terms of Service agreement for an app or service",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "serviceName": { "type": "string", "description": "Name of the app or service" },
+          "companyName": { "type": "string", "description": "Company name" },
+          "contactEmail": { "type": "string", "description": "Legal contact email" },
+          "platform": {
+            "type": "string",
+            "enum": ["Web App", "Mobile App (iOS/Android)", "Both", "SaaS Platform"],
+            "description": "Platform the service runs on"
+          },
+          "keyPolicies": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1,
+            "description": "Key policies that apply, e.g. 'No refunds', 'User-generated content'"
+          },
+          "jurisdiction": { "type": "string", "description": "Governing law jurisdiction, e.g. 'California, USA'" }
+        },
+        "required": ["serviceName", "companyName", "contactEmail", "platform", "keyPolicies", "jurisdiction"]
+      }
     },
     {
       "name": "generate_eula",
-      "description": "Generate an End-User License Agreement for a software application"
+      "description": "Generate an End-User License Agreement for a software application",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "appName": { "type": "string", "description": "Name of the application" },
+          "companyName": { "type": "string", "description": "Company or developer name" },
+          "platform": {
+            "type": "string",
+            "enum": ["iOS", "Android", "Desktop (Windows/Mac)", "Web", "All Platforms"],
+            "description": "Platform the application runs on"
+          },
+          "licenseType": {
+            "type": "string",
+            "enum": ["Free", "Paid (one-time)", "Freemium", "Subscription"],
+            "description": "How the application is licensed/sold"
+          },
+          "restrictions": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1,
+            "description": "Usage restrictions, e.g. 'No reverse engineering', 'No redistribution'"
+          }
+        },
+        "required": ["appName", "companyName", "platform", "licenseType", "restrictions"]
+      }
     },
     {
       "name": "generate_cookie_policy",
-      "description": "Generate a GDPR-aware cookie policy for a website or web app"
+      "description": "Generate a GDPR-aware cookie policy for a website or web app",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "websiteName": { "type": "string", "description": "Name of the website or app" },
+          "websiteUrl": { "type": "string", "description": "Website URL" },
+          "cookieTypes": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1,
+            "description": "Cookie categories the site uses, e.g. 'Essential cookies', 'Analytics cookies'"
+          },
+          "thirdPartyServices": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1,
+            "description": "Third-party services that set cookies, e.g. 'Google Analytics', 'Facebook Pixel'"
+          },
+          "contactEmail": { "type": "string", "description": "Contact email" }
+        },
+        "required": ["websiteName", "cookieTypes", "thirdPartyServices", "contactEmail"]
+      }
     },
     {
       "name": "generate_disclaimer",
-      "description": "Generate a liability disclaimer (general, medical, financial, fitness, legal, or affiliate)"
+      "description": "Generate a liability disclaimer (general, medical, financial, fitness, legal, or affiliate)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "websiteName": { "type": "string", "description": "Name of the website or app" },
+          "companyName": { "type": "string", "description": "Company name, if different from the site name" },
+          "disclaimerType": {
+            "type": "string",
+            "enum": [
+              "General (informational content)",
+              "Medical (health information)",
+              "Financial (investment/trading)",
+              "Fitness (workout/nutrition)",
+              "Legal (legal information)",
+              "Affiliate (affiliate links/commissions)"
+            ],
+            "description": "The type of disclaimer that matches the site's content"
+          },
+          "externalLinks": { "type": "boolean", "description": "Whether the site links to external websites" },
+          "contactEmail": { "type": "string", "description": "Contact email" }
+        },
+        "required": ["websiteName", "disclaimerType", "externalLinks", "contactEmail"]
+      }
     },
     {
       "name": "get_full_document",
-      "description": "Fetch the full text of a previously generated document using a PrivacyPage license key"
+      "description": "Fetch the full text of a previously generated document using a PrivacyPage license key",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "documentId": { "type": "string", "description": "The documentId returned by a generate_* tool" },
+          "licenseKey": {
+            "type": "string",
+            "description": "PrivacyPage license key. Falls back to the PRIVACYPAGE_LICENSE_KEY environment variable."
+          }
+        },
+        "required": ["documentId"]
+      }
     }
   ],
   "compatibility": {
