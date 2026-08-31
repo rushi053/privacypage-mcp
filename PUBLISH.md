@@ -52,11 +52,37 @@ Most of these auto-sync from the official registry within days, but direct submi
 | --- | --- |
 | **mcp.so** | Submit via the "Submit" form on https://mcp.so (GitHub URL) |
 | **Glama** | https://glama.ai/mcp/servers — auto-indexes from the registry; claim the listing with your GitHub account to get the "Official" tier |
-| **Smithery** | https://smithery.ai — sign in with GitHub, add server from your repo |
+| **Smithery** | See "Submit to Smithery" below — requires publishing an MCPB bundle, NOT the npm URL |
 | **PulseMCP** | https://www.pulsemcp.com — auto-syncs from the official registry (PulseMCP is a founding registry backer); use their contact form to expedite/claim |
 | **mcpservers.org** | Submit a PR to the site's repo or use its submit form |
 
 Also consider a PR to the README of the `modelcontextprotocol/servers` GitHub repo — the "community servers" list there is still one of the highest-traffic discovery pages.
+
+### Submit to Smithery (MCPB bundle)
+
+Smithery's URL flow is only for hosted Streamable-HTTP servers — pasting the npm URL fails with a 403 scan error. For local stdio servers, Smithery distributes a pre-built [MCPB bundle](https://github.com/anthropics/mcpb) instead. The repo has a `manifest.json` (MCPB manifest) and `.mcpbignore` for this.
+
+Build the bundle:
+
+```bash
+cd /Users/rushiraj/Desktop/privacypage-mcp
+npm run build
+npm prune --omit=dev                       # bundle prod deps only
+npx -y @anthropic-ai/mcpb pack . privacypage-mcp.mcpb
+npm install                                # restore dev deps
+```
+
+Publish it (CLI, recommended):
+
+```bash
+npm install -g smithery@latest
+smithery auth login
+smithery mcp publish ./privacypage-mcp.mcpb -n rushi053/privacypage-mcp
+```
+
+Or via UI: https://smithery.ai/new → choose the **Local (MCPB bundle)** option → upload `privacypage-mcp.mcpb` → complete the flow. The license-key config UI comes from `user_config` in `manifest.json`.
+
+When bumping versions, also update `version` in `manifest.json`, re-pack, and re-publish.
 
 ## 5. Announce
 

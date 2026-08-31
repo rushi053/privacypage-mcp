@@ -1,0 +1,9 @@
+# Keep the MCPB bundle to runtime files only: manifest.json, dist/,
+# node_modules/ (prod deps), package.json, README.md, LICENSE.
+src/
+scripts/
+tsconfig.json
+package-lock.json
+server.json
+PUBLISH.md
+*.mcpb

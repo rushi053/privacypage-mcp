@@ -1,0 +1,83 @@
+{
+  "manifest_version": "0.3",
+  "name": "privacypage-mcp",
+  "display_name": "PrivacyPage",
+  "version": "0.1.0",
+  "description": "Generate privacy policies, ToS, EULAs, cookie policies & disclaimers from your AI agent.",
+  "long_description": "MCP server for PrivacyPage (privacypage.io). Generates privacy policies, terms of service, EULAs, cookie policies, and liability disclaimers for the app you're building, straight from your AI agent. Every generate tool returns a free 25-line preview plus a documentId; the full document is unlocked with a one-time license (no subscription).",
+  "author": {
+    "name": "PrivacyPage",
+    "email": "hello@privacypage.io",
+    "url": "https://privacypage.io"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rushi053/privacypage-mcp.git"
+  },
+  "homepage": "https://privacypage.io",
+  "support": "https://github.com/rushi053/privacypage-mcp/issues",
+  "license": "MIT",
+  "keywords": [
+    "mcp",
+    "privacy-policy",
+    "legal",
+    "terms-of-service",
+    "eula",
+    "cookie-policy",
+    "disclaimer",
+    "gdpr",
+    "ccpa"
+  ],
+  "server": {
+    "type": "node",
+    "entry_point": "dist/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/dist/index.js"],
+      "env": {
+        "PRIVACYPAGE_LICENSE_KEY": "${user_config.privacypage_license_key}"
+      }
+    }
+  },
+  "tools": [
+    {
+      "name": "generate_privacy_policy",
+      "description": "Generate a GDPR/CCPA/COPPA-aware privacy policy for an app or website"
+    },
+    {
+      "name": "generate_terms_of_service",
+      "description": "Generate a Terms of Service agreement for an app or service"
+    },
+    {
+      "name": "generate_eula",
+      "description": "Generate an End-User License Agreement for a software application"
+    },
+    {
+      "name": "generate_cookie_policy",
+      "description": "Generate a GDPR-aware cookie policy for a website or web app"
+    },
+    {
+      "name": "generate_disclaimer",
+      "description": "Generate a liability disclaimer (general, medical, financial, fitness, legal, or affiliate)"
+    },
+    {
+      "name": "get_full_document",
+      "description": "Fetch the full text of a previously generated document using a PrivacyPage license key"
+    }
+  ],
+  "compatibility": {
+    "platforms": ["darwin", "win32", "linux"],
+    "runtimes": {
+      "node": ">=18.0.0"
+    }
+  },
+  "user_config": {
+    "privacypage_license_key": {
+      "type": "string",
+      "title": "PrivacyPage License Key",
+      "description": "Optional. One-time license key from privacypage.io ($9.99 single document / $24.99 bundle) used by get_full_document to unlock full documents. Free previews work without it.",
+      "sensitive": true,
+      "required": false
+    }
+  }
+}
