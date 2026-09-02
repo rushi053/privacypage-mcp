@@ -1,0 +1,4 @@
+# Secrets are never agent-readable. Env var names may be documented; values never.
+.env
+.env.*
+!.env.example

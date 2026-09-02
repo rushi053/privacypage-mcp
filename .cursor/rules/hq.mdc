@@ -1,0 +1,19 @@
+---
+description: privacypage-mcp — MCP server for PrivacyPage, published to npm and MCP registries. Repo facts and release conventions; HQ at ~/Desktop/hq
+alwaysApply: true
+---
+
+# privacypage-mcp (distribution for Stream B)
+
+Business context and protocols: `/Users/rushiraj/Desktop/hq/` — read `CONTEXT.md`, `LOG.md`, `BACKLOG.md`, `PLAYBOOK.md` first.
+
+## Facts
+- TypeScript MCP server exposing 6 PrivacyPage tools to AI agents. Talks to https://privacypage.io APIs; users supply a `privacypage_license_key`.
+- Published to: npm `privacypage-mcp` (2FA on publish — Rushiraj runs `npm publish`), official MCP Registry as `io.github.rushi053/privacypage-mcp` (`server.json`; description must stay ≤100 chars), Glama (claimed), Smithery as `rjadeja053/privacypage-mcp` via MCPB bundle.
+- Smithery quirks: needs a `manifest.json` (MCPB 0.3) with full JSON-Schema `inputSchema` per tool; pack with plain `zip`, not `mcpb pack` (which strips the schemas). Steps in `PUBLISH.md`. `*.mcpb` is gitignored.
+- `README.md` has a "Data handling" section — keep it accurate if payloads or storage change.
+
+## Conventions
+- A release touches: version in `package.json` + `server.json` + `manifest.json` (keep in sync), changelog/README, npm publish (Rushiraj), `mcp-publisher publish`, Smithery re-pack + resubmit.
+- If PrivacyPage API behavior changes (e.g. preview semantics), update tool descriptions here the same day.
+- Never read `.env*`.
